@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Car_Capstone.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,18 +8,39 @@ using System.Web.Http;
 
 namespace Car_Capstone.Controllers
 {
+    [RoutePrefix("api/chars")]
     public class ValuesController : ApiController
     {
+        public List<Car> chars = new List<Car>() {
+            new Car("Mercury", "Sable", 1990, "Grey"),
+            new Car("Ford", "Taurus", 1995, "White"),
+            new Car("Jeep", "Cherokee", 1999, "Red"),
+            new Car("Dodge", "Intrepid", 2000, "Black"),
+            new Car("Plymouth", "Voyager", 1994, "Baby Blue"),
+            new Car("Honda", "Accord", 2008, "Maroon")
+        };
         // GET api/values
-        public IEnumerable<string> Get()
+        [Route("")]
+        public List<Car> Get()
         {
-            return new string[] { "value1", "value2" };
+            return chars;
         }
 
         // GET api/values/5
-        public string Get(int id)
+        [Route("{id:int}")]
+        public Car Get(int id)
         {
-            return "value";
+            return chars[id];
+        }
+
+
+        [Route("{name}")]
+        [HttpGet]
+        public List<Car> GetByName(string name)
+        {
+            var character = chars.Where(c => c.Make.Contains(name)).ToList();
+
+            return character;
         }
 
         // POST api/values
